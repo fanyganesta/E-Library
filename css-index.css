@@ -1,0 +1,27 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.tb {    
+    border-spacing: 0px;
+}
+
+.tb tr, .tb td, .tb th {
+    border:1px solid black;
+    margin: 0px;
+    padding: 10px;
+}
+
+.ct {
+    text-align: center;
+}
+
+.error {
+    color: red;
+    font-style:italic;
+}
+
+.message {
+    color:green;
+    font-style:italic;
+}
