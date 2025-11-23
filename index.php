@@ -46,6 +46,7 @@
     <table class="tb">
         <tr>
             <th>No.</th>
+            <th>Buku</th>
             <th>Judul Buku</th>
             <th>Penerbit</th>
             <th>Tahun Terbit</th>
@@ -58,6 +59,12 @@
                 <td class="ct">
                     <?= $i; $i++ ?>
                 </td>
+                <td> 
+                    <?php if(!isset($row['img'])) : ?>
+                        <p style="font-style: italic"> (Gambar belum ditambahkan) </p>
+                    <?php else : ?>
+                        <img src="<?=$row['img']?>" alt="Gambar buku">
+                    <?php endif ?>
                 <td> <?= $row['judulBuku'] ?> </td>
                 <td> <?= $row['penerbit'] ?> </td>
                 <td class="ct"> <?= $row['tahunTerbit'] ?> </td>

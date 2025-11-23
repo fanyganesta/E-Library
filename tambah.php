@@ -19,7 +19,7 @@
     <a href="index.php"> Kembali ke beranda</a>
     <br>
     <br>
-    <form action="" method="POST"> 
+    <form action="" method="POST" enctype="multipart/form-data"> 
         <table> 
             <tr>
                 <td>
@@ -45,6 +45,9 @@
                 <td> <label for="rating">Rating:</label> </td>
                 <td> <input type="text" id="rating" name="rating"> </td>
             </tr>
+            <td>
+                <td> <label for="image">Cover Buku:</label> </td>
+                <td> <input type="file" name="image" id="image"></td>
             <tr>
                 <td colspan="2" class="ct"> 
                     <button type="submit" name="btn-tambah">Tambah</button>
