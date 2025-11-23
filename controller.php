@@ -13,8 +13,26 @@
     }
 
     function index($request = null){
-        $query = "SELECT * FROM books";
+        $limit = 10;
+        global $db;
+
+        if(!isset($_GET['halaman']) || $_GET['halaman'] < 0){
+            $halamanAktif = 1;
+        } else {
+            $halamanAktif = $_GET['halaman'];
+        }
+
+        $index = $halamanAktif * $limit - $limit;
+        $allData = mysqli_query($db, "SELECT * FROM books");
+        $jumlahData = mysqli_num_rows($allData);
+        $halamanPaginasi = ceil($jumlahData / $limit);
+        $query = "SELECT * FROM books LIMIT $index, $limit";
         $qResult = query($query);
+
+        foreach($qResult as $key => $row){
+            $qResult[$key] +=  ['halamanPaginasi' => $halamanPaginasi];
+            $qResult[$key] += ['halamanAktif' => $halamanAktif];
+        }
         return $qResult;
     }
 

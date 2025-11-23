@@ -46,7 +46,7 @@
         </tr>
         <?php $i = 1; foreach($rows as $row) : ?>
             <tr> 
-                <td>
+                <td class="ct">
                     <?= $i; $i++ ?>
                 </td>
                 <td> <?= $row['judulBuku'] ?> </td>
@@ -61,6 +61,23 @@
                 </td>
             </tr>
         <?php endforeach ?>
+        <tr>
+            <td colspan="7" class="ct"> 
+                <?php if($row['halamanAktif'] != 1) : ?>
+                    <a href="?halaman=<?= $row['halamanAktif'] - 1?>"> &laquo;</a>
+                <?php endif ?>
+                <?php for ($j = 1; $j <= $row['halamanPaginasi']; $j++) : ?>
+                    <?php if($j == $row['halamanAktif']) : ?>
+                        <p style="font-weight: bold; display: inline; color: red"><?= $j ?></p>
+                    <?php else :?>
+                        <a href="?halaman=<?= $j ?>"><?= $j?></a>
+                    <?php endif ?>
+                <?php endfor ?>
+                <?php if($row['halamanAktif'] != $row['halamanPaginasi']) : ?>
+                    <a href="?halaman=<?= $row['halamanAktif'] + 1?>"> &raquo;</a>
+                <?php endif ?>
+            </td>
+        </tr>
     </table>
 
 </body>
