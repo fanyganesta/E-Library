@@ -100,4 +100,50 @@
         }
     }
 
+
+
+
+
+    function get_ubah($id){
+        global $db;
+        $query = "SELECT * FROM books WHERE id = ?";
+        $prepQuery = $db->prepare($query);
+        $prepQuery->bind_param('s', $id);
+        $prepQuery->execute();
+        $result = $prepQuery->get_result();
+        return $result->fetch_assoc();       
+    }
+    
+    
+    
+    
+    function ubah(){
+        global $db;
+        $id = $_POST['id'];
+        $judulBuku = $_POST['judulBuku'];
+        $penerbit = $_POST['penerbit'];
+        $tahunTerbit = $_POST['tahunTerbit'];
+        $jumlahHalaman = $_POST['jumlahHalaman'];
+        $rating = $_POST['rating'];
+        $query = "UPDATE books SET 
+            judulBuku = ?,
+            penerbit = ?,
+            tahunTerbit = ?,
+            jumlahHalaman = ?,
+            rating = ?
+            WHERE id = ?
+        ";
+
+        $prepQuery = $db->prepare($query);
+        $prepQuery->bind_param('ssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $id);
+        $prepQuery->execute();
+        $result = mysqli_affected_rows($db);
+        if($result > 0){
+            header("Location: index.php?message=Data berhasil dirubah");
+            exit;
+        }else{
+            header("Location: index.php?error=Data gagal dirubah");
+            exit;
+        }
+    }
 ?>

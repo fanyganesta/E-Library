@@ -64,9 +64,9 @@
                 <td class="ct"> <?= $row['jumlahHalaman'] ?> </td>
                 <td class="ct"> <?= $row['rating'] ?> </td>
                 <td class="ct"> 
-                    <a href="ubah.php?id=<?= $row['id'] ?>">Ubah</a>
+                    <a href="ubah.php?ID=<?= $row['ID'] ?>">Ubah</a>
                     <p style="display:inline"> | </p>
-                    <a href="hapus.php?id=<?= $row['id'] ?>">Hapus</a>
+                    <a href="hapus.php?ID=<?= $row['ID'] ?>">Hapus</a>
                 </td>
             </tr>
         <?php endforeach ?>
