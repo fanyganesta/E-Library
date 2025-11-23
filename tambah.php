@@ -1,5 +1,8 @@
 <?php
-
+    require 'controller.php';
+    if(isset($_POST['btn-tambah'])){
+        tambah();
+    }
 
 ?>
 
@@ -24,6 +27,27 @@
                 </td>
                 <td>
                     <input name="judulBuku" id="judulBuku" type="text">
+                </td>
+            </tr>
+            <tr>
+                <td> <label for="penertbit">Penerbit:</labeel> </td>
+                <td> <input id="penerbit" type="text" name="penerbit"> </td>
+            </tr>
+            <tr>
+                <td> <label for="tahunTerbit">Tahun Terbit:</label> </td>
+                <td> <input type="text" id="tahunTerbit" name="tahunTerbit"> </td>
+            </tr>
+            <tr>
+                <td> <label for="jumlahHalaman">Jumlah Halaman:</label> </td>
+                <td> <input type="type" id="jumlahHalaman" name="jumlahHalaman"> </td>
+            </tr>
+            <tr> 
+                <td> <label for="rating">Rating:</label> </td>
+                <td> <input type="text" id="rating" name="rating"> </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="ct"> 
+                    <button type="submit" name="btn-tambah">Tambah</button>
                 </td>
             </tr>
         </table>

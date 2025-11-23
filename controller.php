@@ -72,4 +72,32 @@
         return $rows;
     }
 
+
+
+
+    function tambah(){
+        global $db;
+        $judulBuku = htmlspecialchars($_POST['judulBuku']);
+        $penerbit = htmlspecialchars($_POST['penerbit']);
+        $tahunTerbit = htmlspecialchars($_POST['tahunTerbit']);
+        $jumlahHalaman = htmlspecialchars($_POST['jumlahHalaman']);
+        $rating = htmlspecialchars($_POST['rating']);
+
+        $query = "INSERT INTO books VALUES(
+            '', ?, ?, ?, ?, ?
+        )";
+
+        $prepQuery = $db->prepare($query);
+        $prepQuery->bind_param('sssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating);
+        $prepQuery->execute();
+        $result = mysqli_affected_rows($db);
+        if($result > 0){
+            header("Location: index.php?message=Data berhasil ditambah!");
+            exit;
+        }else{
+            header("Location: index.php?error=Data gagal ditambah!");
+            exit;
+        }
+    }
+
 ?>
