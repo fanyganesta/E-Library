@@ -13,9 +13,9 @@
     }
 
     function index($request = null){
-        $limit = 10;
         global $db;
-
+        
+        $limit = 10;
         if(!isset($_GET['halaman']) || $_GET['halaman'] < 0){
             $halamanAktif = 1;
         } else {
@@ -38,6 +38,38 @@
 
 
 
+    function cari(){
+        $req = $_POST;
+        $cari = '%' . $req['cari'] . '%';
+        global $db;
 
+        $query = "SELECT * FROM books WHERE 
+            judulBuku LIKE ? ||
+            penerbit LIKE ? ||
+            tahunTerbit LIKE ? ||
+            rating LIKE ?
+        ";
+        $prepQuery = $db->prepare($query);
+        $prepQuery->bind_param('ssss', $cari, $cari, $cari, $cari);
+        $prepQuery->execute();
+        $result = $prepQuery->get_result();
+        if($result->num_rows == 0){
+            $cari = $req['cari'];
+            header("Location: index.php?error=Data tidak ditemukan&cari=$cari");
+            exit;
+        }
+        $rows = [];
+        while($row = $result->fetch_assoc()){
+            $row += ['key' => $req['cari']]; 
+            $rows[] = $row;   
+        }
+
+        foreach($rows as $key => $value){
+            $rows[$key] += ['halamanPaginasi' => 1];
+            $rows[$key] += ['halamanAktif' => 1];
+        }
+
+        return $rows;
+    }
 
 ?>

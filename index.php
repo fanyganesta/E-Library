@@ -1,6 +1,9 @@
 <?php
     require 'controller.php';
     $rows = index();
+    if(isset($_POST['btn-cari']) && mb_strlen($_POST['cari'])){
+        $rows = cari();
+    }
 ?>
 
 
@@ -27,9 +30,15 @@
     <br>
     <br>
 
-    <form action="" method="POST">
+    <form action="index.php" method="POST">
         <label for="cari">Cari Buku: </label>
-        <input name="cari" id="cari" tipe="text">
+        <input name="cari" id="cari" tipe="text" value="<?php if(isset($_POST['cari'])){
+            if(mb_strlen($_POST['cari']) > 0){
+                echo $rows[0]['key'];
+            }
+                }elseif(isset($_GET['cari'])){
+                    echo $_GET['cari'];
+                } ?>">
         <button tipe="submit" name="btn-cari"> Cari</button>
     </form>
     <br>
@@ -61,23 +70,25 @@
                 </td>
             </tr>
         <?php endforeach ?>
-        <tr>
-            <td colspan="7" class="ct"> 
-                <?php if($row['halamanAktif'] != 1) : ?>
-                    <a href="?halaman=<?= $row['halamanAktif'] - 1?>"> &laquo;</a>
-                <?php endif ?>
-                <?php for ($j = 1; $j <= $row['halamanPaginasi']; $j++) : ?>
-                    <?php if($j == $row['halamanAktif']) : ?>
-                        <p style="font-weight: bold; display: inline; color: red"><?= $j ?></p>
-                    <?php else :?>
-                        <a href="?halaman=<?= $j ?>"><?= $j?></a>
+        <?php if($row['halamanPaginasi'] > 1) : ?>
+            <tr>
+                <td colspan="7" class="ct"> 
+                    <?php if($row['halamanAktif'] != 1) : ?>
+                        <a href="?halaman=<?= $row['halamanAktif'] - 1?>"> &laquo;</a>
                     <?php endif ?>
-                <?php endfor ?>
-                <?php if($row['halamanAktif'] != $row['halamanPaginasi']) : ?>
-                    <a href="?halaman=<?= $row['halamanAktif'] + 1?>"> &raquo;</a>
-                <?php endif ?>
-            </td>
-        </tr>
+                    <?php for ($j = 1; $j <= $row['halamanPaginasi']; $j++) : ?>
+                        <?php if($j == $row['halamanAktif']) : ?>
+                            <p style="font-weight: bold; display: inline; color: red"><?= $j ?></p>
+                        <?php else :?>
+                            <a href="?halaman=<?= $j ?>"><?= $j?></a>
+                        <?php endif ?>
+                    <?php endfor ?>
+                    <?php if($row['halamanAktif'] != $row['halamanPaginasi']) : ?>
+                        <a href="?halaman=<?= $row['halamanAktif'] + 1?>"> &raquo;</a>
+                    <?php endif ?>
+                </td>
+            </tr>
+        <?php endif ?>
     </table>
 
 </body>
