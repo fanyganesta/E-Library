@@ -12,7 +12,7 @@
         return $rows;
     }
 
-    function index($request = null){
+    function index(){
         global $db;
         
         $limit = 10;
@@ -81,14 +81,15 @@
         $penerbit = htmlspecialchars($_POST['penerbit']);
         $tahunTerbit = htmlspecialchars($_POST['tahunTerbit']);
         $jumlahHalaman = htmlspecialchars($_POST['jumlahHalaman']);
-        $rating = htmlspecialchars($_POST['rating']);
+        $rating = htmlspecialchars($_POST['rating']);        
+        $img = fileProsessing();
 
-        $query = "INSERT INTO books VALUES(
-            '', ?, ?, ?, ?, ?
-        )";
+
+        $query = "INSERT INTO books (judulBuku, penerbit, tahunTerbit, jumlahHalaman, rating, img) VALUES
+            (?, ?, ?, ?, ?, ?)";
 
         $prepQuery = $db->prepare($query);
-        $prepQuery->bind_param('sssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating);
+        $prepQuery->bind_param('ssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $img);
         $prepQuery->execute();
         $result = mysqli_affected_rows($db);
         if($result > 0){
@@ -149,5 +150,22 @@
 
 
 
-    
+    function fileProsessing(){
+        $files = $_FILES['image'];
+
+        $rawName = $files['name'];
+        $expResult = explode('.', $rawName);
+        $alwdExt = ['webp', 'jpg', 'jpeg', 'png'];
+        if(!in_array(strtolower(end($expResult)), $alwdExt)){
+            header("Location: tambah.php?error=File tidak diperbolehkan");
+            exit;
+        }elseif($files['size'] > 100000 ){
+            header("Location: tambah.php?error=Ukuran file terlalu besar");
+            exit;
+        }
+
+        $namaFiles = uniqid($expResult[0]) . '.' . end($expResult);
+        move_uploaded_file($files['tmp_name'], 'img/' . $namaFiles);
+        return $namaFiles;
+    }
 ?>
