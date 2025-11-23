@@ -66,7 +66,7 @@
                 <td class="ct"> 
                     <a href="ubah.php?ID=<?= $row['ID'] ?>">Ubah</a>
                     <p style="display:inline"> | </p>
-                    <a href="hapus.php?ID=<?= $row['ID'] ?>">Hapus</a>
+                    <a href="hapus.php?ID=<?= $row['ID'] ?>" onclick="return confirm('Apakah yakin ingin menghapus data ini?')">Hapus</a>
                 </td>
             </tr>
         <?php endforeach ?>
