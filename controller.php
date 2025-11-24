@@ -129,17 +129,26 @@
         $query = "UPDATE books SET 
             judulBuku = ?,
             penerbit = ?,
-            tahunTerbit = ?,
-            jumlahHalaman = ?,
-            rating = ?
-            WHERE id = ?
+            tahunTerbit =  ?,
+            jumlahHalaman =  ?,
+            rating =  ?,
+            img =  ?
+            WHERE ID = ?
         ";
 
+        if($_FILES['newImg']['error'] != 4 ){
+            $img = fileProsessing();
+        }elseif($_FILES['newImg']['error'] == 4 && $_POST['oldImg'] == 'null'){
+            $img = null;
+        }else{
+            $img = $_POST['oldImg'];
+        }
+
         $prepQuery = $db->prepare($query);
-        $prepQuery->bind_param('ssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $id);
+        $prepQuery->bind_param('sssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $img, $id);
         $prepQuery->execute();
         $result = mysqli_affected_rows($db);
-        if($result > 0){
+        if($result >= 0){
             header("Location: index.php?message=Data berhasil dirubah");
             exit;
         }else{
@@ -157,10 +166,10 @@
         $expResult = explode('.', $rawName);
         $alwdExt = ['webp', 'jpg', 'jpeg', 'png'];
         if(!in_array(strtolower(end($expResult)), $alwdExt)){
-            header("Location: tambah.php?error=File tidak diperbolehkan");
+            header("Location: index.php?error=File tidak diperbolehkan");
             exit;
         }elseif($files['size'] > 100000 ){
-            header("Location: tambah.php?error=Ukuran file terlalu besar");
+            header("Location: index.php?error=Ukuran file terlalu besar");
             exit;
         }
 
