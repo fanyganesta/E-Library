@@ -1,5 +1,6 @@
 <?php 
     require 'controller.php';
+    mustGuest();
     if(isset($_POST['btn-login'])){
         login();
     }

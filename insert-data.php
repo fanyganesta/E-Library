@@ -78,6 +78,9 @@
             exit;
         }
         
+    }else{
+        header("Location: login.php?error=Perintah tidak ditemukan");
+        exit;
     }
 
 ?>

@@ -1,5 +1,6 @@
 <?php
     require 'controller.php';
+    statusLogin();
     if(!isset($_GET['ID'])){
         header("Location: index.php?error=Pilih data yang mau dihapus dahulu");
         exit;

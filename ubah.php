@@ -1,5 +1,6 @@
 <?php 
     require 'controller.php';
+    statusLogin();
     $row = get_ubah($_GET['ID']);
     // var_dump($row['img']);die;
     if(isset($_POST['btn-ubah'])){
@@ -56,7 +57,7 @@
             </tr>
             <tr> 
                 <td> <label for="newImg">Cover Buku:</label></td>
-                <td> <input type="file" name="newImg" id="newImg"> </td>
+                <td> <input type="file" name="image" id="newImg"> </td>
             </tr>
             <tr>
                 <td colspan="2" class="ct">

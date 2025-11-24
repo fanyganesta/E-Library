@@ -1,5 +1,6 @@
 <?php
     require 'controller.php';
+    statusLogin();
     $rows = index();
     if(isset($_POST['btn-cari']) && mb_strlen($_POST['cari'])){
         $rows = cari();
@@ -59,11 +60,13 @@
                 <td class="ct">
                     <?= $row['ID'] ?>
                 </td>
+                <td>
                     <?php if(!isset($row['img'])) : ?>
                         <p style="font-style: italic"> (Gambar belum ditambahkan) </p>
                     <?php else : ?>
                         <img src="img/<?=$row['img']?>" alt="Gambar buku" width="100">
                     <?php endif ?>
+                </td>
                 <td> <?= $row['judulBuku'] ?> </td>
                 <td> <?= $row['penerbit'] ?> </td>
                 <td class="ct"> <?= $row['tahunTerbit'] ?> </td>

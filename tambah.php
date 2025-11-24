@@ -1,5 +1,6 @@
 <?php
     require 'controller.php';
+    statusLogin();
     if(isset($_POST['btn-tambah'])){
         tambah();
     }
@@ -55,10 +56,6 @@
                 <td> <label for="image">Cover Buku:</label> </td>
                 <td> <input type="file" name="image" id="image" required ></td>
             </tr>
-            <td>
-                <td> <label for="image">Cover Buku:</label> </td>
-                <td> <input type="file" name="image" id="image"></td>
-            <tr>
                 <td colspan="2" class="ct"> 
                     <button type="submit" name="btn-tambah">Tambah</button>
                 </td>

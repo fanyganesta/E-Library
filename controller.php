@@ -136,9 +136,9 @@
             WHERE ID = ?
         ";
 
-        if($_FILES['newImg']['error'] != 4 ){
+        if($_FILES['image']['error'] != 4 ){
             $img = fileProsessing();
-        }elseif($_FILES['newImg']['error'] == 4 && $_POST['oldImg'] == 'null'){
+        }elseif($_FILES['image']['error'] == 4 && $_POST['oldImg'] == null){
             $img = null;
         }else{
             $img = $_POST['oldImg'];
@@ -166,6 +166,7 @@
         $expResult = explode('.', $rawName);
         $alwdExt = ['webp', 'jpg', 'jpeg', 'png'];
         if(!in_array(strtolower(end($expResult)), $alwdExt)){
+            var_dump($expResult);die;
             header("Location: index.php?error=File tidak diperbolehkan");
             exit;
         }elseif($files['size'] > 100000 ){
@@ -188,10 +189,56 @@
 
         $query = "SELECT * FROM users WHERE username = ?";
         $prepQuery = $db->prepare($query);
+
+        if(!$prepQuery){
+            header("Location: login.php?error=Gagal menyiapkan query");
+            exit;
+        }
+        
         $prepQuery->bind_param('s', $username);
         $prepQuery->execute();
         $result = $prepQuery->get_result();
-        var_dump($result);
-        die;
+        if(mysqli_num_rows($result) < 1){
+            header("Location: login.php?error=Username atau Password salah");
+            exit;
+        }else{
+
+            $rows = $result->fetch_assoc();
+            $dbPassword = $rows['password'];
+            $passCheck = password_verify($password, $dbPassword);
+            if($passCheck){
+                session_start();
+                $_SESSION['username'] = $username;
+                header("Location: index.php?message=Berhasil Login");
+                exit;
+            }else{
+                header("Location: login.php?error=Username atau Password salah");
+                exit;
+            }
+        }
+    }
+
+
+
+
+
+    function statusLogin(){
+        session_start();
+        if(!isset($_SESSION['username'])){
+
+            header("Location: login.php?error=Login dahulu");
+            exit;
+        }
+    }
+
+    
+
+
+    function mustGuest(){
+        session_start();
+        if(isset($_SESSION['username'])){
+            header("Location: index.php?error=Anda belum logout");
+            exit;
+        }
     }
 ?>
