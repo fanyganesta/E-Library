@@ -177,4 +177,21 @@
         move_uploaded_file($files['tmp_name'], 'img/' . $namaFiles);
         return $namaFiles;
     }
+
+
+
+
+    function login(){
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        global $db;
+
+        $query = "SELECT * FROM users WHERE username = ?";
+        $prepQuery = $db->prepare($query);
+        $prepQuery->bind_param('s', $username);
+        $prepQuery->execute();
+        $result = $prepQuery->get_result();
+        var_dump($result);
+        die;
+    }
 ?>
