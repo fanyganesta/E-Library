@@ -1,6 +1,7 @@
 <?php 
     require 'controller.php';
     $row = get_ubah($_GET['ID']);
+    // var_dump($row['img']);die;
     if(isset($_POST['btn-ubah'])){
         ubah();
     }
@@ -20,9 +21,19 @@
 
     <h3> Ubah data dari "<?=$row['judulBuku']?>"</h3>
 
-    <form method="POST" action="">
+    <form method="POST" action="" enctype="multipart/form-data">
         <input type="hidden" name="id" value="<?= $row['ID'];?>">
+        <input type="hidden" name="oldImg" value="<?= $row['img'] ?>">
         <table>
+            <tr> 
+                <td colspan="2" class="ct">
+                    <?php if(isset($row['img'])) : ?>
+                        <img src="img/<?=$row['img']?>" width="100">
+                    <?php else : ?>
+                        <p style="font-style:italic;"> (Belum ada gambar) </p>
+                    <?php endif ?>
+                </td>
+            </tr>
             <tr>
                 <td> <label for="judulBuku">Judul Buku:</label> </td>
                 <td> <input type="text" name="judulBuku" id="judulBuku" value="<?=$row['judulBuku']?>" required></td>
@@ -42,6 +53,10 @@
             <tr>
                 <td> <label for="rating">Rating: </label> </td>
                 <td> <input type="text" id="rating" name="rating" value="<?=$row['rating']?>" required> </td>
+            </tr>
+            <tr> 
+                <td> <label for="newImg">Cover Buku:</label></td>
+                <td> <input type="file" name="newImg" id="newImg"> </td>
             </tr>
             <tr>
                 <td colspan="2" class="ct">

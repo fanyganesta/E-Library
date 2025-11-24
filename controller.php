@@ -12,7 +12,7 @@
         return $rows;
     }
 
-    function index($request = null){
+    function index(){
         global $db;
         
         $limit = 10;
@@ -81,14 +81,15 @@
         $penerbit = htmlspecialchars($_POST['penerbit']);
         $tahunTerbit = htmlspecialchars($_POST['tahunTerbit']);
         $jumlahHalaman = htmlspecialchars($_POST['jumlahHalaman']);
-        $rating = htmlspecialchars($_POST['rating']);
+        $rating = htmlspecialchars($_POST['rating']);        
+        $img = fileProsessing();
 
-        $query = "INSERT INTO books VALUES(
-            '', ?, ?, ?, ?, ?
-        )";
+
+        $query = "INSERT INTO books (judulBuku, penerbit, tahunTerbit, jumlahHalaman, rating, img) VALUES
+            (?, ?, ?, ?, ?, ?)";
 
         $prepQuery = $db->prepare($query);
-        $prepQuery->bind_param('sssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating);
+        $prepQuery->bind_param('ssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $img);
         $prepQuery->execute();
         $result = mysqli_affected_rows($db);
         if($result > 0){
@@ -128,17 +129,26 @@
         $query = "UPDATE books SET 
             judulBuku = ?,
             penerbit = ?,
-            tahunTerbit = ?,
-            jumlahHalaman = ?,
-            rating = ?
-            WHERE id = ?
+            tahunTerbit =  ?,
+            jumlahHalaman =  ?,
+            rating =  ?,
+            img =  ?
+            WHERE ID = ?
         ";
 
+        if($_FILES['newImg']['error'] != 4 ){
+            $img = fileProsessing();
+        }elseif($_FILES['newImg']['error'] == 4 && $_POST['oldImg'] == 'null'){
+            $img = null;
+        }else{
+            $img = $_POST['oldImg'];
+        }
+
         $prepQuery = $db->prepare($query);
-        $prepQuery->bind_param('ssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $id);
+        $prepQuery->bind_param('sssssss', $judulBuku, $penerbit, $tahunTerbit, $jumlahHalaman, $rating, $img, $id);
         $prepQuery->execute();
         $result = mysqli_affected_rows($db);
-        if($result > 0){
+        if($result >= 0){
             header("Location: index.php?message=Data berhasil dirubah");
             exit;
         }else{
@@ -149,5 +159,39 @@
 
 
 
-    
+    function fileProsessing(){
+        $files = $_FILES['image'];
+
+        $rawName = $files['name'];
+        $expResult = explode('.', $rawName);
+        $alwdExt = ['webp', 'jpg', 'jpeg', 'png'];
+        if(!in_array(strtolower(end($expResult)), $alwdExt)){
+            header("Location: index.php?error=File tidak diperbolehkan");
+            exit;
+        }elseif($files['size'] > 100000 ){
+            header("Location: index.php?error=Ukuran file terlalu besar");
+            exit;
+        }
+
+        $namaFiles = uniqid($expResult[0]) . '.' . end($expResult);
+        move_uploaded_file($files['tmp_name'], 'img/' . $namaFiles);
+        return $namaFiles;
+    }
+
+
+
+
+    function login(){
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        global $db;
+
+        $query = "SELECT * FROM users WHERE username = ?";
+        $prepQuery = $db->prepare($query);
+        $prepQuery->bind_param('s', $username);
+        $prepQuery->execute();
+        $result = $prepQuery->get_result();
+        var_dump($result);
+        die;
+    }
 ?>

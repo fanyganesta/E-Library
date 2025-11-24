@@ -57,13 +57,12 @@
         <?php $i = 1; foreach($rows as $row) : ?>
             <tr> 
                 <td class="ct">
-                    <?= $i; $i++ ?>
+                    <?= $row['ID'] ?>
                 </td>
-                <td> 
                     <?php if(!isset($row['img'])) : ?>
                         <p style="font-style: italic"> (Gambar belum ditambahkan) </p>
                     <?php else : ?>
-                        <img src="<?=$row['img']?>" alt="Gambar buku">
+                        <img src="img/<?=$row['img']?>" alt="Gambar buku" width="100">
                     <?php endif ?>
                 <td> <?= $row['judulBuku'] ?> </td>
                 <td> <?= $row['penerbit'] ?> </td>
@@ -79,7 +78,7 @@
         <?php endforeach ?>
         <?php if($row['halamanPaginasi'] > 1) : ?>
             <tr>
-                <td colspan="7" class="ct"> 
+                <td colspan="8" class="ct"> 
                     <?php if($row['halamanAktif'] != 1) : ?>
                         <a href="?halaman=<?= $row['halamanAktif'] - 1?>"> &laquo;</a>
                     <?php endif ?>
