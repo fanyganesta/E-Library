@@ -186,6 +186,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
         global $db;
+        $rememberme = $_POST['rememberme'] ?? null;
 
         $query = "SELECT * FROM users WHERE username = ?";
         $prepQuery = $db->prepare($query);
@@ -207,6 +208,13 @@
             $dbPassword = $rows['password'];
             $passCheck = password_verify($password, $dbPassword);
             if($passCheck){
+
+                if($rememberme == true){
+                    setcookie('key', $rows['ID'], time()+60);
+                    $hashed = hash('sha512', $username);
+                    setcookie('token', $hashed, time()+60);
+                }
+
                 session_start();
                 $_SESSION['username'] = $username;
                 header("Location: index.php?message=Berhasil Login");
@@ -224,7 +232,20 @@
 
     function statusLogin(){
         session_start();
-        if(!isset($_SESSION['username'])){
+        if(isset($_COOKIE['key'])){
+            global $db;
+            $query = "SELECT username FROM users WHERE ID = ?";
+            $prepQuery =$db->prepare($query);
+            if(!isset($prepQuery)){
+                header("Location: login.php?error=Periksa query");
+                exit;
+            }
+            $prepQuery->bind_param('s', $_COOKIE['key']);
+            $prepQuery->execute();
+            $result = $prepQuery->get_result();
+            $username = $result->fetch_assoc();
+            $_SESSION['username'] = $username;
+        }elseif(!isset($_SESSION['username'])){
 
             header("Location: login.php?error=Login dahulu");
             exit;
